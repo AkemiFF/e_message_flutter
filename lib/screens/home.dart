@@ -1,5 +1,6 @@
 import 'package:e_message/screens/guest/auth.dart';
-import 'package:e_message/screens/guest/term.dart';
+// import 'package:e_message/screens/guest/password.dart';
+// import 'package:e_message/screens/guest/term.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -13,8 +14,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return const SafeArea(
-      // child: AuthScren(),
-      child: TermScreen(),
+      child: AuthScren(),
+      // child: PasswordScreen(),
     );
   }
 }

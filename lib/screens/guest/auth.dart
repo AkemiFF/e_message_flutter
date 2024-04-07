@@ -8,6 +8,10 @@ class AuthScren extends StatefulWidget {
 }
 
 class _AuthScrenState extends State<AuthScren> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final RegExp emailRegex = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
+  String _email = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,25 +25,26 @@ class _AuthScrenState extends State<AuthScren> {
               children: [
                 RichText(
                   text: TextSpan(
-                    text: "Nous allons\n".toUpperCase(),
+                    text: "we are \n".toUpperCase(),
                     style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 30,
+                      fontSize: 35,
                     ),
                     children: [
                       TextSpan(
-                        text: "commencer\n".toUpperCase(),
+                        text: "going\n".toUpperCase(),
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      TextSpan(text: "ici".toUpperCase()),
+                      TextSpan(text: "to start".toUpperCase()),
+                      TextSpan(text: "\nhere".toUpperCase()),
                     ],
                   ),
                 ),
                 const Text(
-                  "Toute est dans le code",
+                  "Everything is on code",
                   style: TextStyle(
                     fontStyle: FontStyle.italic,
                   ),
@@ -48,14 +53,29 @@ class _AuthScrenState extends State<AuthScren> {
                   height: 90,
                 ),
                 Form(
+                  key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text("Entrer votre email"),
+                      const Text("Enter your email"),
                       const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
+                        onChanged: (value) => {
+                          setState(() {
+                            _email = value;
+                          }),
+                          if (value.isNotEmpty && emailRegex.hasMatch(value))
+                            {
+                              _formKey.currentState!.validate(),
+                              print(("mail correct")),
+                            }
+                        },
+                        validator: (value) =>
+                            value!.isEmpty || !emailRegex.hasMatch(value)
+                                ? "Please enter a valid mail"
+                                : null,
                         decoration: const InputDecoration(
                           hintText: 'akemikun@domain.tit',
                           hintStyle: TextStyle(
@@ -74,12 +94,16 @@ class _AuthScrenState extends State<AuthScren> {
                         height: 25,
                       ),
                       ElevatedButton(
-                        onPressed: () => print("Hello"),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            print(_email);
+                          }
+                        },
                         style: ButtonStyle(
                           elevation: MaterialStateProperty.all(0),
                           padding:
                               MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            const EdgeInsets.all(16.0),
+                            const EdgeInsets.all(15.0),
                           ),
                           backgroundColor:
                               MaterialStateProperty.all<Color>(Colors.blue),
@@ -95,7 +119,7 @@ class _AuthScrenState extends State<AuthScren> {
                             ),
                           ),
                         ),
-                        child: Text("continuer".toUpperCase()),
+                        child: Text("continue".toUpperCase()),
                       )
                     ],
                   ),
