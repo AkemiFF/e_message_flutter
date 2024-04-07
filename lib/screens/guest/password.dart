@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class PasswordScreen extends StatefulWidget {
@@ -11,7 +11,9 @@ class PasswordScreen extends StatefulWidget {
 
 class _PasswordScreenState extends State<PasswordScreen> {
   bool _isSecret = true;
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _password = "";
+  String? _passwordError;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +44,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 height: 50.0,
               ),
               Form(
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -51,6 +54,13 @@ class _PasswordScreenState extends State<PasswordScreen> {
                     ),
                     TextFormField(
                       obscureText: _isSecret,
+                      onChanged: (value) {
+                        setState(() {
+                          _password = value;
+                        });
+                        _validatePassword(value);
+                      },
+                      validator: (value) => _passwordError,
                       decoration: InputDecoration(
                         suffixIcon: InkWell(
                           onTap: () => {
@@ -79,7 +89,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
                       height: 25,
                     ),
                     ElevatedButton(
-                      onPressed: () => print("Hello"),
+                      onPressed: () => {
+                        if (_formKey.currentState!.validate())
+                          {
+                            print(_password),
+                          }
+                      },
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all(0),
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
@@ -100,7 +115,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         ),
                       ),
                       child: Text("continue".toUpperCase()),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -109,5 +124,15 @@ class _PasswordScreenState extends State<PasswordScreen> {
         ),
       ),
     );
+  }
+
+  void _validatePassword(String value) {
+    if (value.isEmpty) {
+      _passwordError = 'Veuillez entrer un mot de passe';
+    } else if (value.length < 6) {
+      _passwordError = 'Le mot de passe doit contenir au moins 6 caractères';
+    } else {
+      _passwordError = null;
+    }
   }
 }

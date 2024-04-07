@@ -69,7 +69,6 @@ class _AuthScrenState extends State<AuthScren> {
                           if (value.isNotEmpty && emailRegex.hasMatch(value))
                             {
                               _formKey.currentState!.validate(),
-                              print(("mail correct")),
                             }
                         },
                         validator: (value) =>
